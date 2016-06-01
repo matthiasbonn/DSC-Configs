@@ -1,4 +1,4 @@
-# DSC-Configs
+# PowerShell DSC-Configs
 
 
 ##Credits
