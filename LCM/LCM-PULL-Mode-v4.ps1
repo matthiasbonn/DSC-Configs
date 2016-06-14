@@ -52,6 +52,7 @@ Configuration SetPullMode
 SetPullMode -Computername server.contoso.com -ConfiuratonID 992aafbd-28e2-49fe-bb4e-c1404e5891f8 -PullServer PullServer.contoso.com
 # Psedit .\SetPullMode\server.contoso.com.meta.mof
 
+<<<<<<< HEAD:LCM/LCM-PULL-Mode.ps1
 $ConfiuratonID = Get-DSCLoacalConfiguartionManager -CimSession $ComputerName | select-Object -ExpandProperty ConfigurationID
 $source =  ...\
 $dest = "C:\Program Files\WindowsPowerShell\DSCService\Configuration\$ConfigurationID.mof"
@@ -60,3 +61,6 @@ copy $source $dest
 New-DSCCecksum $dest 
 
 Set-DscLocalConfigurationManager -Server server.contoso.com -Path .\SetPullMode -Verbose
+=======
+Set-DscLocalConfigurationManager -Server server.contoso.com -Path .\SetPullMode -Verbose
+>>>>>>> origin/master:LCM/LCM-PULL-Mode-v4.ps1
