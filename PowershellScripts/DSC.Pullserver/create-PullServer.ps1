@@ -155,5 +155,5 @@ configuration CreatePullServer {
 
 #This line actually calls the function above to create the MOF file.
 
-CreatePullServer –ComputerName hbmes570.hugoboss.com -certificateThumbPrint ‎04ccf13c0ea9bb4f090e9edcc1168d5283b4b283
-Start-DscConfiguration .\CreatePullserver -ComputerName HBMES570.hugoboss.com  -Wait -Verbose -Force
+CreatePullServer –ComputerName pullserver.contoso.com -certificateThumbPrint ‎04ccf13c0ea9bb4f090e9edcc1168d5283b4b283
+Start-DscConfiguration .\CreatePullserver -ComputerName pullserver.contoso.com  -Wait -Verbose -Force
