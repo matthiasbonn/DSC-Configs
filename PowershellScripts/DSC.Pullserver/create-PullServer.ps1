@@ -15,7 +15,7 @@ configuration CreatePullServer {
 
         [Parameter(HelpMessage='This should be a string with enough entropy (randomness) to protect the registration of clients to the pull server.  We will use new GUID by default.')]
         [ValidateNotNullOrEmpty()]
-        [string] $RegistrationKey = ([guid]::NewGuid()).Guid
+        [string] $RegistrationKey = ([guid]::NewGuid()).Guid,
 
         [Parameter(HelpMessage='This should be the drive letter there the DSC Configurations will be stored during editing.')]
         [ValidateNotNullOrEmpty()]
