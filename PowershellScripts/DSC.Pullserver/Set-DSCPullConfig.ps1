@@ -1,7 +1,6 @@
-﻿#v4 PullMode LCM Configuration 
-# 2016
-
-
+﻿# DSC configuration to set pull mode on a node
+# Prerequisits: DSCHelper Module to update the SQLite Database with the assignment guid to nodename 
+# Note:
 Configuration SetPullMode
 {
     param(
@@ -15,7 +14,7 @@ Configuration SetPullMode
 
         [Parameter(HelpMessage='Host or FQDN of the Pull Serversystem')]
         [ValidateNotNullOrEmpty()] 
-        [string]$ConfigurationID = [GUID]::NewGuid().Guid
+        [string]$GUID = [GUID]::NewGuid().Guid
         
     )
     Node $ComputerName
@@ -29,7 +28,7 @@ Configuration SetPullMode
             #CertificateID                  =
             # ConfigurationMode possible values are ApplyOnly, ApplyAndMonitor or ApplyAndAutoCorrect
             ConfigurationMode              = 'ApplyAndAutoCorrect'
-            ConfigurationID                = $ConfigurationID
+            ConfigurationID                = $GUID
             ConfigurationModeFrequencyMins = 15
             # RefreshFrequencyMins should be set to an integer multiple of ConfigurationModeFrequencyMins 
             RefreshFrequencyMins           = 30
@@ -46,21 +45,7 @@ Configuration SetPullMode
     }
 }
 
+# Psedit .\SetPullMode\DSCNode.contoso.com.meta.mof
 
-
-
-SetPullMode -Computername server.contoso.com -ConfiuratonID 992aafbd-28e2-49fe-bb4e-c1404e5891f8 -PullServer PullServer.contoso.com
-# Psedit .\SetPullMode\server.contoso.com.meta.mof
-
-<<<<<<< HEAD:LCM/LCM-PULL-Mode.ps1
-$ConfiuratonID = Get-DSCLoacalConfiguartionManager -CimSession $ComputerName | select-Object -ExpandProperty ConfigurationID
-$source =  ...\
-$dest = "C:\Program Files\WindowsPowerShell\DSCService\Configuration\$ConfigurationID.mof"
-copy $source $dest
-
-New-DSCCecksum $dest 
-
-Set-DscLocalConfigurationManager -Server server.contoso.com -Path .\SetPullMode -Verbose
-=======
-Set-DscLocalConfigurationManager -Server server.contoso.com -Path .\SetPullMode -Verbose
->>>>>>> origin/master:LCM/LCM-PULL-Mode-v4.ps1
+# Required Module DSCHelper
+#Set-DSCPullConfig -Computer DSCNode.contoso.com -Guid 992aafbd-28e2-49fe-bb4e-c1404e5891f8 -PullServer pullserver.contoso.com
