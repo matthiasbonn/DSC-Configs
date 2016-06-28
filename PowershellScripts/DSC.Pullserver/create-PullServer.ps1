@@ -35,6 +35,147 @@ configuration CreatePullServer {
             RebootNodeIfNeeded = $false 
         }
 
+		#       # Install the IIS role
+        WindowsFeature IIS {
+        
+            Ensure = "Present"
+            Name = "Web-Server"
+        }
+
+#       # Make sure the following defaults cannot be removed:        
+
+        WindowsFeature DefaultDoc {
+        
+            Ensure = "Present"
+            Name = "Web-Default-Doc"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+
+        WindowsFeature HTTPErrors {
+        
+            Ensure = "Present"
+            Name = "Web-HTTP-Errors"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+
+        WindowsFeature HTTPLogging {
+        
+            Ensure = "Present"
+            Name = "Web-HTTP-Logging"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+
+        WindowsFeature StaticContent {
+        
+            Ensure = "Present"
+            Name = "Web-Static-Content"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+
+        WindowsFeature RequestFiltering {
+        
+            Ensure = "Present"
+            Name = "Web-Filtering"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+        
+ #      # Install additional IIS components to support the Web Application 
+
+        WindowsFeature NetExtens4 {
+        
+            Ensure = "Present"
+            Name = "Web-Net-Ext45"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+
+        WindowsFeature AspNet45 {
+        
+            Ensure = "Present"
+            Name = "Web-Asp-Net45"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+
+        WindowsFeature ISAPIExt {
+        
+            Ensure = "Present"
+            Name = "Web-ISAPI-Ext"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+
+        WindowsFeature ISAPIFilter {
+
+            Ensure = "Present"
+            Name = "Web-ISAPI-filter"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+ 
+ #      # I don't want these defaults for Web-Server to ever be enabled:
+ 
+        WindowsFeature DirectoryBrowsing {
+        
+            Ensure = "Absent"
+            Name = "Web-Dir-Browsing"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+     
+
+        WindowsFeature StaticCompression {
+        
+            Ensure = "Absent"
+            Name = "Web-Stat-Compression"
+            DependsOn = '[WindowsFeature]IIS'
+        }        
+
+#      # I don't want these Additional settings for Web-Server to ever be enabled:
+        # This list is shortened for demo purposes. I include eveything that should not be installed
+
+       WindowsFeature ASP {
+        
+            Ensure = "Absent"
+            Name = "Web-ASP"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+
+       WindowsFeature CGI {
+        
+            Ensure = "Absent"
+            Name = "Web-CGI"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+
+       WindowsFeature IPDomainRestrictions {
+        
+            Ensure = "Absent"
+            Name = "Web-IP-Security"
+            DependsOn = '[WindowsFeature]IIS'
+        }
+
+# !!!!! # GUI Remote Management of IIS requires the following: - people always forget this until too late
+
+        WindowsFeature Management {
+
+            Name = 'Web-Mgmt-Service'
+            Ensure = 'Present'
+        }
+
+        Registry RemoteManagement { # Can set other custom settings inside this reg key
+
+            Key = 'HKLM:\SOFTWARE\Microsoft\WebManagement\Server'
+            ValueName = 'EnableRemoteManagement'
+            ValueType = 'Dword'
+            ValueData = '1'
+            DependsOn = @('[WindowsFeature]IIS','[WindowsFeature]Management')
+       }
+
+       Service StartWMSVC {
+
+            Name = 'WMSVC'
+            StartupType = 'Automatic'
+            State = 'Running'
+            DependsOn = '[Registry]RemoteManagement'
+
+}
+
         # The next series of settings disable SSL and enable TLS, for environments where that is required by policy.
         Registry TLS1_2ServerEnabled
         {
