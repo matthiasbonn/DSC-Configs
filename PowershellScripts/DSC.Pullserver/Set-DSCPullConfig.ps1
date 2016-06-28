@@ -38,7 +38,7 @@ Configuration SetPullMode
             # DownloadManagerName - two names available WebDownloadManager for Web, DSCFileDownloadManger for SMB Shares
             DownloadManagerName            = 'WebDownloadManager'
             DownloadManagerCustomData      = @{
-                ServerURL                 = "https://$PullServer:8080/PSDSCPullServer.svr"
+                ServerURL                 = "https://$($PullServer):8080/PSDSCPullServer.svc"
                 AllowUnsecureConnection   = $False
             }
         }
